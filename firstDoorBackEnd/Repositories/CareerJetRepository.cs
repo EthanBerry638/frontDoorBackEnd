@@ -11,10 +11,12 @@ namespace firstDoorBackEnd.Repositories
             _httpClient = httpClient;
         }
 
-        public async Task<List<Job>>? GetJobsAsync(string keywords, string location, string userIp, string userAgent)
+        public async Task<List<Job>>? GetJobsAsync(string userIp, string userAgent)
         {
             try
             {
+                
+
                 var jobs = await _httpClient.GetFromJsonAsync<List<Job>>("search");
 
                 return jobs ?? new List<Job>();
