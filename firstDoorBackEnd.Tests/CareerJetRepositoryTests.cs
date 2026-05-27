@@ -41,5 +41,34 @@ namespace firstDoorBackEnd.Tests
             Assert.NotNull(result);
             Assert.AreEqual(1, result.Count());
         }
+
+        [Test]
+        public async Task GetJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButNoJobs()
+        {
+            var mockFactory = new Mock<IHttpClientFactory>();
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpResponseMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Content = JsonContent.Create(new List<Job>())
+                });
+
+            var client = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://careerjet.com")
+            };
+
+            mockFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(client);
+
+            _careerJetRepository = new CareerJetRepository(client);
+
+            var result = await _careerJetRepository.GetJobsAsync();
+
+            Assert.NotNull(result);
+            Assert.AreEqual(0, result.Count());
+        }
     }
 }
