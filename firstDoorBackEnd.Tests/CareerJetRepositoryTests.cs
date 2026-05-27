@@ -227,7 +227,6 @@ namespace firstDoorBackEnd.Tests
         [TestCase(System.Net.HttpStatusCode.BadGateway)]
         [TestCase(System.Net.HttpStatusCode.InternalServerError)]
         [TestCase(System.Net.HttpStatusCode.ServiceUnavailable)]
-        [TestCase(System.Net.HttpStatusCode.ServiceUnavailable)]
         public async Task GetAllJobsAsync_ShouldReturnEmptyList_WhenExternalAPIReturnsAnOndcoumentedFailureStatusCode(System.Net.HttpStatusCode httpStatusCode)
         {
             var mockFactory = new Mock<IHttpClientFactory>();
