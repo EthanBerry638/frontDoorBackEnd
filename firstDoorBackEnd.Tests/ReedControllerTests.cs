@@ -4,6 +4,7 @@ using firstDoorBackEnd.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shouldly;
+using FluentAssertions;
 
 namespace firstDoorBackEnd.Tests;
 
