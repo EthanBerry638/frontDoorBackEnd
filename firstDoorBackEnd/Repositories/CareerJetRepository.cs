@@ -41,7 +41,7 @@ namespace firstDoorBackEnd.Repositories
                     throw new CareerJetForbiddenException("The API key or credentials provided are invalid");
                 }
 
-                return null;
+                return new List<Job>();
         //}
         //    catch (Exception)
         //    {
