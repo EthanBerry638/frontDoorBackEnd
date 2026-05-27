@@ -3,6 +3,7 @@ using Moq;
 using Moq.Protected;
 using System.Net.Http.Json;
 using firstDoorBackEnd.Models;
+using firstDoorBackEnd.Exceptions;
 
 namespace firstDoorBackEnd.Tests
 {
