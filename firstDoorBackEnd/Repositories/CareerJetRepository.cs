@@ -31,9 +31,9 @@ namespace firstDoorBackEnd.Repositories
 
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    var errorDetails = response.Content.ReadFromJsonAsync<CareerJetResponse>();
+                    var errorDetails = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
 
-                    throw new CareerJetBadRequestException(errorDetails?.Result!.message!);
+                    throw new CareerJetBadRequestException(errorDetails?.message!);
                 }
 
                 return null;
