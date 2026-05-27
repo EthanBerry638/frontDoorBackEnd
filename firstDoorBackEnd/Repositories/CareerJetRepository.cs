@@ -1,4 +1,5 @@
 ﻿using firstDoorBackEnd.Models;
+using firstDoorBackEnd.Exceptions;
 
 namespace firstDoorBackEnd.Repositories
 {
@@ -13,21 +14,34 @@ namespace firstDoorBackEnd.Repositories
 
         public async Task<List<Job>>? GetAllJobsAsync(string userIp, string userAgent)
         {
-            try
-            {
+            //try
+            //{
                 string query = $"?keywords={Uri.EscapeDataString("junior software")}" +
                                $"&location={Uri.EscapeDataString("london")}" +
                                $"&user_ip={Uri.EscapeDataString(userIp)}" +
                                $"&user_agent={Uri.EscapeDataString(userAgent)}";
 
-                var response = await _httpClient.GetFromJsonAsync<CareerJetResponse>(query);
+                HttpResponseMessage response = await _httpClient.GetAsync(query);
 
-                return response?.jobs ?? new List<Job>();
-            }
-            catch (Exception)
-            {
+                if(response.IsSuccessStatusCode)
+                {
+                    var jobResponse = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
+                    return jobResponse?.jobs ?? new List<Job>();
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    var errorDetails = response.Content.ReadFromJsonAsync<CareerJetResponse>();
+
+                    throw new CareerJetBadRequestException(errorDetails?.Result!.message!);
+                }
+
                 return null;
-            }
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
         }
     }
 }
