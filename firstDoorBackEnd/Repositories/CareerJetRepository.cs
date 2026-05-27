@@ -12,41 +12,34 @@ namespace firstDoorBackEnd.Repositories
             _httpClient = httpClient;
         }
 
-        public async Task<List<Job>>? GetAllJobsAsync(string userIp, string userAgent)
+        public async Task<List<Job>> GetAllJobsAsync(string userIp, string userAgent)
         {
-            //try
-            //{
-                string query = $"?keywords={Uri.EscapeDataString("junior software")}" +
+            string query = $"?keywords={Uri.EscapeDataString("junior software")}" +
                                $"&location={Uri.EscapeDataString("london")}" +
                                $"&user_ip={Uri.EscapeDataString(userIp)}" +
                                $"&user_agent={Uri.EscapeDataString(userAgent)}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(query);
+            HttpResponseMessage response = await _httpClient.GetAsync(query);
 
-                if(response.IsSuccessStatusCode)
-                {
-                    var jobResponse = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
-                    return jobResponse?.jobs ?? new List<Job>();
-                }
+            if (response.IsSuccessStatusCode)
+            {
+                var jobResponse = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
+                return jobResponse?.jobs ?? new List<Job>();
+            }
 
-                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    var errorDetails = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var errorDetails = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
 
-                    throw new CareerJetBadRequestException(errorDetails?.message!);
-                }
+                throw new CareerJetBadRequestException(errorDetails?.message!);
+            }
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                {
-                    throw new CareerJetForbiddenException("The API key or credentials provided are invalid");
-                }
+            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new CareerJetForbiddenException("The API key or credentials provided are invalid");
+            }
 
-                return new List<Job>();
-        //}
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
+            return new List<Job>();
         }
     }
 }
