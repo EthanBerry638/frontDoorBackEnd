@@ -11,7 +11,7 @@ namespace firstDoorBackEnd.Tests
         private CareerJetRepository _careerJetRepository;
 
         [Test]
-        public async Task GetJobsAsync_ShouldReturnListOfJobs_WhenExternalAPIReturnsListOfJobs()
+        public async Task GetAllJobsAsync_ShouldReturnListOfJobs_WhenExternalAPIReturnsListOfJobs()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
@@ -46,7 +46,7 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
-        public async Task GetJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButNoJobs()
+        public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButNoJobs()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
@@ -81,7 +81,7 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
-        public async Task GetJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButJobsIsNull()
+        public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButJobsIsNull()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
