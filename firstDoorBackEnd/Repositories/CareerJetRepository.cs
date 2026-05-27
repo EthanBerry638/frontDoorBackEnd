@@ -37,11 +37,11 @@ namespace firstDoorBackEnd.Repositories
                 }
 
                 return null;
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
+        //}
+        //    catch (Exception)
+        //    {
+        //        return null;
+        //    }
         }
     }
 }

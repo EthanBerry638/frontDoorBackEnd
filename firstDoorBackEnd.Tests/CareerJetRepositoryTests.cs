@@ -84,7 +84,7 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
-        public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButJobsIsNull()
+        public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButJobsAreNull()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
@@ -192,6 +192,36 @@ namespace firstDoorBackEnd.Tests
 
             Assert.NotNull(result);
             Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public async Task GetAllJobsAsync_ShouldThrowCareerJetForbiddenException_WhenExternalAPIReturnsForbidden()
+        {
+            var mockFactory = new Mock<IHttpClientFactory>();
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                });
+
+            var client = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://careerjet.com")
+            };
+
+            mockFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(client);
+
+            _careerJetRepository = new CareerJetRepository(client);
+
+            var exception = Assert.ThrowsAsync<CareerJetForbiddenException>(async () =>
+            {
+                await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            });
+
+            Assert.That(exception.Message, Does.Contain("The API key or credentials provided are invalid"));
         }
     }
 }
