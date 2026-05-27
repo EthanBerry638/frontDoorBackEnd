@@ -120,7 +120,7 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
-        public async Task GetAllJobsAsync_ShouldThrowCareerJetBadRequestException_WhenExternalAPIReturnsOkButJobsIsNull()
+        public async Task GetAllJobsAsync_ShouldThrowCareerJetBadRequestException_WhenExternalAPIReturnsBadRequest()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
