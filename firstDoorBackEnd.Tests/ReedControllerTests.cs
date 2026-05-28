@@ -58,24 +58,22 @@ public class ReedControllerTests
         };
         
         _reedServiceMock
-        .Setup(r => r.GetJobsAsync())
+        .Setup(r => r.GetJobsAsync(It.IsAny<string>(), It.IsAny<string>()))
         .ReturnsAsync(testJobs);
 
         //Act
 
-        var result = await _reedController.GetJobsAsync();
+        var result = await _reedController.GetJobsAsync("keyword", "location");
 
         //Assert
 
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         var value = okResult.Value as List<Job>;
 
-        value.Should().NotBeNull();
-
         value.Should().BeEquivalentTo(testJobs);
 
         value.Should().HaveCount(3);
-        value![0].Title
-        .Should().Be("Junior .NET Developer");
+        value![0].Title.Should().Be("Junior .NET Developer");
+        _reedServiceMock.Verify(r => r.GetJobsAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
     }
 }
