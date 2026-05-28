@@ -15,12 +15,12 @@ public class CareerJetControllerTests
         var mockCareerJetService = new Mock<ICareerJetService>();
         var jobs = new List<Job>();
 
-        mockCareerJetService.Setup(s => s.GetAllJobsAsync()).ReturnsAsync(jobs);
+        mockCareerJetService.Setup(s => s.GetAllJobsAsync("string","string")).ReturnsAsync(jobs);
 
         var controller = new CareerJetController(mockCareerJetService.Object);
 
-        var result = await controller.GetAllJobsAsync();
+        var result = await controller.GetAllJobsAsync("string","string");
 
-        mockCareerJetService.Verify(s => s.GetAllJobsAsync(), Times.Once);
+        mockCareerJetService.Verify(s => s.GetAllJobsAsync("string", "string"), Times.Once);
     }
 }
