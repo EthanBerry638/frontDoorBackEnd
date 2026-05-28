@@ -12,7 +12,7 @@ public class CareerJetService : ICareerJetService
         _careerJetRepository = careerJetRepository;
     }
 
-    public async Task<List<Job>> GetAllJobsAsync()
+    public async Task<List<Job>> GetAllJobsAsync(string userIp, string userAgent)
     {
         return await Task.FromResult(new List<Job>());
     }
