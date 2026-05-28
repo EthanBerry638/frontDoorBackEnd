@@ -16,9 +16,9 @@ namespace firstDoorBackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllJobsAsync()
+        public async Task<IActionResult> GetAllJobsAsync(string userIp, string userAgent)
         {
-           var jobs = await _careerJetService.GetAllJobsAsync();
+           var jobs = await _careerJetService.GetAllJobsAsync(userIp,userAgent);
            return Ok(jobs);
         }
     }
