@@ -58,12 +58,12 @@ public class ReedControllerTests
         };
         
         _reedServiceMock
-        .Setup(r => r.GetJobsAsync())
+        .Setup(r => r.GetJobsAsync(It.IsAny<string>(), It.IsAny<string>()))
         .ReturnsAsync(testJobs);
 
         //Act
 
-        var result = await _reedController.GetJobsAsync();
+        var result = await _reedController.GetJobsAsync("keyword", "location");
 
         //Assert
 
@@ -74,6 +74,6 @@ public class ReedControllerTests
 
         value.Should().HaveCount(3);
         value![0].Title.Should().Be("Junior .NET Developer");
-        _reedServiceMock.Verify(r => r.GetJobsAsync(), Times.Once);
+        _reedServiceMock.Verify(r => r.GetJobsAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
     }
 }
