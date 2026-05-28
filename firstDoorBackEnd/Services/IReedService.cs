@@ -4,6 +4,6 @@ namespace firstDoorBackEnd.Services
 {
     public interface IReedService
     {
-       public Task<List<Job>> GetJobsAsync();
+       public Task<List<Job>> GetJobsAsync(string keyword, string location);
     }
 }
