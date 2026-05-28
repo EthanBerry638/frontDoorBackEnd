@@ -8,19 +8,45 @@ namespace firstDoorBackEnd.Tests;
 public class CareerJetControllerTests
 {
     private CareerJetController _careerJetController;
+    private Mock<ICareerJetService> mockCareerJetService;
+
+    [SetUp]
+    public void Setup()
+    {
+        mockCareerJetService = new Mock<ICareerJetService>();
+        _careerJetController = new CareerJetController(mockCareerJetService.Object);
+    }
 
     [Test]
-    public async Task GetAllJobsAsync_CallsGetAllJobsAsyncFromService()
+    public async Task GetAllJobsAsync_ReturnsOkResultWithJobs()
     {
-        var mockCareerJetService = new Mock<ICareerJetService>();
+        var jobs = new List<Job>()
+        {
+            new("software engineer", "microsoft", "london", ".NET developer", "test url")
+        };
+
+        mockCareerJetService.Setup(s => s.GetAllJobsAsync("string", "string")).ReturnsAsync(jobs);
+
+        var result = await _careerJetController.GetAllJobsAsync("string", "string");
+        var okResult = result as Microsoft.AspNetCore.Mvc.OkObjectResult;
+
+
+        Assert.IsInstanceOf<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);
+        Assert.That(jobs, Is.EqualTo(okResult!.Value));
+    }
+
+    [Test]
+    public async Task GetAllJobsAsync_ReturnsOkResultWithEmptyList()
+    {
         var jobs = new List<Job>();
 
-        mockCareerJetService.Setup(s => s.GetAllJobsAsync("string","string")).ReturnsAsync(jobs);
+        mockCareerJetService.Setup(s => s.GetAllJobsAsync("string", "string")).ReturnsAsync(jobs);
 
-        var controller = new CareerJetController(mockCareerJetService.Object);
+        var result = await _careerJetController.GetAllJobsAsync("string", "string");
+        var okResult = result as Microsoft.AspNetCore.Mvc.OkObjectResult;
 
-        var result = await controller.GetAllJobsAsync("string","string");
-
-        mockCareerJetService.Verify(s => s.GetAllJobsAsync("string", "string"), Times.Once);
+        Assert.IsInstanceOf<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);
+        Assert.That(jobs, Is.EqualTo(okResult!.Value));
     }
+
 }
