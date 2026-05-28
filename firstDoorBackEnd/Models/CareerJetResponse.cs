@@ -5,6 +5,6 @@
         int hits, 
         string message,
         int pages, 
-        List<Job> jobs)
+        List<Job>? jobs)
     {}
 }
