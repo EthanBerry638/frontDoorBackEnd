@@ -9,42 +9,46 @@ namespace firstDoorBackEnd.Tests
 {
     public class CareerJetRepositoryTests
     {
+        private Mock<IHttpClientFactory> _mockFactory;
+        private Mock<HttpMessageHandler> _mockHttpMessageHandler;
         private CareerJetRepository _careerJetRepository;
 
-        [Test]
-        public async Task GetAllJobsAsync_ShouldReturnListOfJobs_WhenExternalAPIReturnsListOfJobs()
+        [SetUp]
+        public void SetUp()
         {
-            var mockFactory = new Mock<IHttpClientFactory>();
+            _mockFactory = new Mock<IHttpClientFactory>();
+            _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
 
-            var mockHttpMessageHanlder = new Mock<HttpMessageHandler>();
-            mockHttpMessageHanlder.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = JsonContent.Create(new CareerJetResponse
-                    (
-                        "JOBS",
-                        1,
-                        "1 job found",
-                        1,
-                        new List<Job> { new("software engineer", "microsoft", "london", ".NET developer", "test url") }
-                    ))
-                });
-
-            var client = new HttpClient(mockHttpMessageHanlder.Object)
+            var client = new HttpClient(_mockHttpMessageHandler.Object)
             {
                 BaseAddress = new Uri("https://careerjet.com")
             };
 
-            mockFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(client);
+            _mockFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(client);
 
             _careerJetRepository = new CareerJetRepository(client);
+        }
+
+        [Test]
+        public async Task GetAllJobsAsync_ShouldReturnListOfJobs_WhenExternalAPIReturnsListOfJobs()
+        {
+            var mockResponse = new CareerJetResponse
+            (
+                "JOBS", 1, "1 job found", 1, new List<Job> { new("software engineer", "microsoft", "london", ".NET developer", "test url") }
+            );
+
+            _mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Content = JsonContent.Create(mockResponse)
+                });
 
             var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
 
             Assert.NotNull(result);
-            Assert.AreEqual(1, result.Count());
+            Assert.That(result.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -80,7 +84,7 @@ namespace firstDoorBackEnd.Tests
             var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
 
             Assert.NotNull(result);
-            Assert.AreEqual(0, result.Count());
+            Assert.That(result.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -116,11 +120,11 @@ namespace firstDoorBackEnd.Tests
             var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
 
             Assert.NotNull(result);
-            Assert.AreEqual(0, result.Count());
+            Assert.That(result.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public async Task GetAllJobsAsync_ShouldThrowCareerJetBadRequestException_WhenExternalAPIReturnsBadRequest()
+        public void GetAllJobsAsync_ShouldThrowCareerJetBadRequestException_WhenExternalAPIReturnsBadRequest()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
@@ -191,11 +195,11 @@ namespace firstDoorBackEnd.Tests
             var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
 
             Assert.NotNull(result);
-            Assert.AreEqual(0, result.Count());
+            Assert.That(result.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public async Task GetAllJobsAsync_ShouldThrowCareerJetForbiddenException_WhenExternalAPIReturnsForbidden()
+        public void GetAllJobsAsync_ShouldThrowCareerJetForbiddenException_WhenExternalAPIReturnsForbidden()
         {
             var mockFactory = new Mock<IHttpClientFactory>();
 
@@ -251,7 +255,7 @@ namespace firstDoorBackEnd.Tests
             var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
 
             Assert.NotNull(result);
-            Assert.AreEqual(0, result.Count());
+            Assert.That(result.Count, Is.EqualTo(0));
         }
     }
 }
