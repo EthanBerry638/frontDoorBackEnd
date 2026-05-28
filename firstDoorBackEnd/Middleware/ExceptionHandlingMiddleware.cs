@@ -18,6 +18,10 @@ namespace firstDoorBackEnd.Middleware
             {
                 await HandleCareerJetForbiddenException(context, ex);
             }
+            catch (Exception ex)
+            {
+                await HandleGenericException(context, ex);
+            }
         }
 
         private async Task HandleCareerJetBadRequestException(HttpContext context, Exception ex)
