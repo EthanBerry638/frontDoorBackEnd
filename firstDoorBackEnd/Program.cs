@@ -1,3 +1,4 @@
+using firstDoorBackEnd.Services;
 using firstDoorBackEnd.Repositories;
 using firstDoorBackEnd.Middleware;
 
@@ -26,7 +27,9 @@ builder.Services.AddHttpClient<ICareerJetRepository, CareerJetRepository>(client
 });
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient<IReedService, ReedService>();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
@@ -41,5 +44,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

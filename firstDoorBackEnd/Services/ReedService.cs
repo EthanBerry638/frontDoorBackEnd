@@ -1,12 +1,22 @@
 ﻿using firstDoorBackEnd.Models;
+using System.Net.Http.Headers;
+using firstDoorBackEnd.Repositories;
 
 namespace firstDoorBackEnd.Services
 {
     public class ReedService : IReedService
     {
-        public async Task<List<Job>> GetJobsAsync()
+        private readonly IReedRepository _repository;
+
+        public ReedService(IReedRepository repository)
         {
-            return new List<Job>();
+            _repository = repository;
+        }
+
+        public Task<List<Job>> GetJobsAsync(string keyword, string location)
+        {
+            return _repository.GetAllJobsAsync(keyword, location);
         }
     }
+
 }
