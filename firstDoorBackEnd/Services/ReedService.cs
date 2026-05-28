@@ -5,7 +5,7 @@ namespace firstDoorBackEnd.Services
     public class ReedService : IReedService
     {
         private readonly HttpClient _httpClient;
-        public ReedService(HttpClient httpClient)
+        public ReedService(HttpClient httpClient) 
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://www.reed.co.uk/api/1.0/");

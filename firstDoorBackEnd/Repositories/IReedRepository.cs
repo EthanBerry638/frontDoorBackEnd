@@ -4,8 +4,10 @@ namespace firstDoorBackEnd.Repositories
 {
     public interface IReedRepository
     {
-       Task<List<Job>> GetJobsAsync(string keyword);
 
-       
+        Task<List<Job>> GetAllJobsAsync(
+        string keyword,
+        string location
+        );
     }
 }
