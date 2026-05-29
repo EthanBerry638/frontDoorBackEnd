@@ -6,16 +6,16 @@ namespace firstDoorBackEnd.Services
 {
     public class ReedService : IReedService
     {
-        private readonly IReedRepository _repository;
+        private readonly IReedRepository _reedRepository;
 
-        public ReedService(IReedRepository repository)
+        public ReedService(IReedRepository reedRepository)
         {
-            _repository = repository;
+            _reedRepository = reedRepository;
         }
 
-        public Task<List<Job>> GetJobsAsync(string keyword, string location)
+        public async Task<List<Job>> GetJobsAsync(string keyword, string location)
         {
-            return _repository.GetAllJobsAsync(keyword, location);
+            return await Task.FromResult(new List<Job>());
         }
     }
 

@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Headers;
 using firstDoorBackEnd.Models;
-using firstDoorBackEnd.Exceptions;
 
 namespace firstDoorBackEnd.Repositories
 {
@@ -15,15 +14,18 @@ namespace firstDoorBackEnd.Repositories
             _httpClient.BaseAddress =
                 new Uri("https://www.reed.co.uk/api/1.0/");
 
-            string apiKey = "d";
+            string apiKey = "";
+
+            var encodedKey =
+                Convert.ToBase64String(
+                    System.Text.Encoding.ASCII
+                        .GetBytes($"{apiKey}:")
+                );
 
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(
                     "Basic",
-                    Convert.ToBase64String(
-                        System.Text.Encoding.ASCII
-                            .GetBytes($"{apiKey}:")
-                    )
+                    encodedKey
                 );
         }
 
