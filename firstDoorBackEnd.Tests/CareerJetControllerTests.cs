@@ -60,21 +60,4 @@ public class CareerJetControllerTests
         Assert.IsInstanceOf<OkObjectResult>(result);
         Assert.That(jobs, Is.EqualTo(okResult!.Value));
     }
-
-    [Test]
-    public async Task GetUserIPAndUserAgent_ReturnsUserIpAndUserAgent()
-    {
-        _httpContext.Connection.RemoteIpAddress = System.Net.IPAddress.Parse("127.0.0.1");
-        _httpContext.Request.Headers["User-Agent"] = "Mozilla/5.0";
-
-        _careerJetController.ControllerContext = new ControllerContext()
-        {
-            HttpContext = _httpContext
-        };
-
-        var result = _careerJetController.GetUserIPAndUserAgent();
-
-        Assert.That(result.Item1, Is.EqualTo("127.0.0.1"));
-        Assert.That(result.Item2, Is.EqualTo("Mozilla/5.0"));
-    }
 }

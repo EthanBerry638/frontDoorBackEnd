@@ -63,7 +63,7 @@ public class ReedControllerTests
 
         //Act
 
-        var result = await _reedController.GetJobsAsync("keyword", "location");
+        var result = await _reedController.GetAllJobsAsync("keyword", "location");
 
         //Assert
 

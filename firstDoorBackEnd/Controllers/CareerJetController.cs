@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using firstDoorBackEnd.Services;
-using firstDoorBackEnd.Models;
+﻿using firstDoorBackEnd.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace firstDoorBackEnd.Controllers
 {
@@ -18,17 +17,11 @@ namespace firstDoorBackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllJobsAsync()
         {
-           var requestInfo = GetUserIPAndUserAgent();
-           var jobs = await _careerJetService.GetAllJobsAsync(requestInfo.Item1,requestInfo.Item2);
-           return Ok(jobs);
-        }
-
-        public (string, string) GetUserIPAndUserAgent()
-        {
             string userIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
             string userAgent = HttpContext.Request.Headers.UserAgent.ToString() ?? string.Empty;
 
-            return (userIp, userAgent);
+            var jobs = await _careerJetService.GetAllJobsAsync(userIp, userAgent);
+            return Ok(jobs);
         }
     }
 }
