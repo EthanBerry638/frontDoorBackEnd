@@ -14,7 +14,8 @@ public class CareerJetService : ICareerJetService
 
     public async Task<List<Job>> GetAllJobsAsync(string userIp, string userAgent)
     {
-        return await _careerJetRepository.GetAllJobsAsync(userIp, userAgent);
+        var jobs = await _careerJetRepository.GetAllJobsAsync(userIp, userAgent);
+        return new List<Job>();
     }
 
 }

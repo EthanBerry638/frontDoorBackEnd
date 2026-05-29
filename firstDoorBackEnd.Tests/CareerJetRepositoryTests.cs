@@ -34,7 +34,7 @@ namespace firstDoorBackEnd.Tests
         {
             var mockResponse = new CareerJetResponse
             (
-                "JOBS", 1, "1 job found", 1, new List<Job> { new("software engineer", "microsoft", "london", ".NET developer", "test url") }
+                "JOBS", 1, "1 job found", 1, new List<CareerJetJob> { new CareerJetJob { Title = "test", Company = "test", Description = "test", Locations = "test", Url = "test" } }
             );
 
             _mockHttpMessageHandler.Protected()
@@ -56,7 +56,7 @@ namespace firstDoorBackEnd.Tests
         {
             var mockResponse = new CareerJetResponse
             (
-                "JOBS", 1, "1 job found", 1, new List<Job>()
+                "JOBS", 1, "1 job found", 1, new List<CareerJetJob>()
             );
 
             _mockHttpMessageHandler.Protected()
