@@ -6,6 +6,7 @@ using firstDoorBackEnd.Repositories;
 using System.Net;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using firstDoorBackEnd.Exceptions;
 
 namespace firstDoorBackEnd.Tests
 {
@@ -92,6 +93,30 @@ namespace firstDoorBackEnd.Tests
             });
 
             Assert.That(jobs, Is.EqualTo(expectedList));
+        }
+
+        [Test]
+        public async Task GetAllJobsEndpoint_ShouldReturnForbidden_WhenRepositoryThrowsForbiddenException()
+        {
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    var mockRepo = new Mock<ICareerJetRepository>();
+
+                    mockRepo.Setup(repo => repo.GetAllJobsAsync(It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new CareerJetForbiddenException("The API key or credentials provided are invalid"));
+
+                    services.AddScoped(_ => mockRepo.Object);
+                });
+            }).CreateClient();
+
+            var response = await client.GetAsync("CareerJet");
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            Assert.That(content.Contains("The API key or credentials provided are invalid"));
         }
     }
 }
