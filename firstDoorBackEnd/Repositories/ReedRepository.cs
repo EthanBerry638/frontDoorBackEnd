@@ -14,7 +14,7 @@ namespace firstDoorBackEnd.Repositories
             _httpClient.BaseAddress =
                 new Uri("https://www.reed.co.uk/api/1.0/");
 
-            string apiKey = "";
+            string apiKey = "bd4e1d0e-5065-478f-9486-1b86a820436d";
 
             var encodedKey =
                 Convert.ToBase64String(
