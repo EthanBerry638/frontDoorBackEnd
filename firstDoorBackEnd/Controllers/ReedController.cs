@@ -18,7 +18,6 @@ namespace firstDoorBackEnd.Controllers
             _reedService = reedService;
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetAllJobsAsync(string keyword, string location)
         {
