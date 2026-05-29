@@ -23,6 +23,7 @@ namespace firstDoorBackEnd.Controllers
      [FromQuery] string keyword,
      [FromQuery] string location)
         {
+
             var jobs = await _reedService.GetJobsAsync(keyword, location);
             return Ok(jobs);
         }
