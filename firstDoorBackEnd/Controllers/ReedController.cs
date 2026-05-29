@@ -22,7 +22,9 @@ namespace firstDoorBackEnd.Controllers
 
         public async Task<IActionResult> GetJobsAsync()
         {
-            var jobs = await _reedService.GetJobsAsync();
+            var jobs = await _reedService.GetJobsAsync(
+                "junior developer",
+                "london");
             return Ok(jobs);
 
         }
