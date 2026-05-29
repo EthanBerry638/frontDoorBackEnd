@@ -38,6 +38,13 @@ namespace firstDoorBackEnd.Tests
                 new CareerJetJob { Title = "test", Company = "test", Locations = "test", Description = "test", Url = "test" }
             };
 
+            var expectedFinalList = new List<Job>
+            {
+                new Job( "test", "test", "test", "test", "test" ),
+                new Job( "test", "test", "test", "test", "test" ),
+                new Job ( "test", "test", "test", "test", "test" )
+            };
+
             var client = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -56,12 +63,12 @@ namespace firstDoorBackEnd.Tests
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var jobs = JsonSerializer.Deserialize<List<CareerJetJob>>(content, new JsonSerializerOptions
+            var jobs = JsonSerializer.Deserialize<List<Job>>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            Assert.That(jobs, Is.EqualTo(expectedList));
+            Assert.That(jobs, Is.EqualTo(expectedFinalList));
         }
 
         [Test]
