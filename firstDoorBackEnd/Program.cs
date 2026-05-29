@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddScoped<ICareerJetService, CareerJetService>();
+
 builder.Services.AddHttpClient<ICareerJetRepository, CareerJetRepository>(client =>
 {
     client.BaseAddress = new Uri("https://search.api.careerjet.net/");
@@ -53,7 +55,10 @@ builder.Services.AddHttpClient<IReedService, ReedService>();
 builder.Services.AddScoped<IReedService, ReedService>();
 builder.Services.AddScoped<IReedRepository, ReedRepository>();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = true;
+});
 
 builder.Services.AddHealthChecks()
     .AddUrlGroup(
@@ -93,3 +98,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program {}
