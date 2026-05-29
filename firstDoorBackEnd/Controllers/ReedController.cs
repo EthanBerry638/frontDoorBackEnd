@@ -8,7 +8,7 @@ namespace firstDoorBackEnd.Controllers
 
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/reed")]
     public class ReedController : ControllerBase
     {
         private readonly IReedService _reedService;
@@ -19,14 +19,12 @@ namespace firstDoorBackEnd.Controllers
         }
 
         [HttpGet]
-
-        public async Task<IActionResult> GetJobsAsync()
+        public async Task<IActionResult> GetJobsAsync(
+     [FromQuery] string keyword,
+     [FromQuery] string location)
         {
-            var jobs = await _reedService.GetJobsAsync(
-                "junior developer",
-                "london");
+            var jobs = await _reedService.GetJobsAsync();
             return Ok(jobs);
-
         }
 
     }
