@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using firstDoorBackEnd.Models;
+using firstDoorBackEnd.Exceptions;
 
 namespace firstDoorBackEnd.Repositories
 {
@@ -16,16 +17,13 @@ namespace firstDoorBackEnd.Repositories
 
             string apiKey = "bd4e1d0e-5065-478f-9486-1b86a820436d";
 
-            var encodedKey =
-                Convert.ToBase64String(
-                    System.Text.Encoding.ASCII
-                        .GetBytes($"{apiKey}:")
-                );
-
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(
                     "Basic",
-                    encodedKey
+                    Convert.ToBase64String(
+                        System.Text.Encoding.ASCII
+                            .GetBytes($"{apiKey}:")
+                    )
                 );
         }
 
@@ -45,10 +43,22 @@ namespace firstDoorBackEnd.Repositories
             {
                 var reedResponse =
                     await response.Content
-                        .ReadFromJsonAsync<ReedResponse>();
+                        .ReadFromJsonAsync<ReedResponseDto>();
 
-                return reedResponse?.results
-                    ?? new List<Job>();
+                if (reedResponse?.results == null)
+                    {
+                        return new List<Job>();
+                    }
+
+                    return reedResponse.results
+                        .Select(x => new Job(
+                            x.jobTitle,
+                            x.employerName,
+                            x.locationName,
+                            x.jobDescription,
+                            x.jobUrl
+                        ))
+                        .ToList();
             }
 
             if (response.StatusCode ==
