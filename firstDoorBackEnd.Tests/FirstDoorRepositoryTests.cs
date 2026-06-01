@@ -38,6 +38,21 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
+        public async Task GetAllSavedJobsAsync_ShouldReturnEmptyListOfJobs_WhenThereAreNoSavedJobsInTheDatabase()
+        {
+            var expectedJobs = new List<SavedJob>();
+
+            var result = await _repository.GetAllSavedJobsAsync();
+
+            result.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
+
+            foreach (var job in result)
+            {
+                job.TimeSaved.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+            }
+        }
+
+        [Test]
         public async Task GetAllSavedJobsAsync_ShouldReturnListOfJobs_WhenThereAreSavedJobsInTheDatabase()
         {
             var expectedJobs = new List<SavedJob>
