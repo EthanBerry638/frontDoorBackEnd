@@ -4,6 +4,7 @@ using firstDoorBackEnd.Repositories;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Shouldly;
 
 namespace firstDoorBackEnd.Tests
 {
@@ -71,5 +72,21 @@ namespace firstDoorBackEnd.Tests
             result.Should().BeEquivalentTo(expectedJobs);
         }
 
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldReturnStatusIncreasedByOne_WhenAJobExistsAtTheIdPassedIn()
+        {
+            Status originalStatus = Status.To_Apply; 
+            Status expectedStatus = Status.Applied; 
+            int id = 1;
+
+            var testJob = new SavedJob { Id = id, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3), Status = originalStatus };
+
+            _context.SavedJobs.Add(testJob);
+            _context.SaveChanges();
+
+            var result = await _repository.UpdateJobStatusAsync(id);
+
+            result.ShouldBeEquivalentTo(expectedStatus);
+        }
     }
 }
