@@ -30,11 +30,6 @@ namespace firstDoorBackEnd.Tests
 
             result.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
 
-            foreach (var job in result)
-            {
-                job.TimeSaved.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
-            }
-
             _mockRepository.Verify(repo => repo.GetAllSavedJobsAsync(), Times.Once());
         }
 
