@@ -63,6 +63,7 @@ namespace firstDoorBackEnd.Tests
             };
 
             _context.SavedJobs.AddRange(expectedJobs);
+            _context.SaveChanges();
 
             var result = await _repository.GetAllSavedJobsAsync();
 
