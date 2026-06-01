@@ -11,7 +11,7 @@ namespace firstDoorBackEnd.Tests
     {
         private Mock<IHttpClientFactory> _mockFactory;
         private Mock<HttpMessageHandler> _mockHttpMessageHandler;
-        private CareerJetRepository _careerJetRepository;
+        private ReedRepository _reedRepository;
 
         [SetUp]
         public void SetUp()
@@ -26,16 +26,26 @@ namespace firstDoorBackEnd.Tests
 
             _mockFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(client);
 
-            _ReedRepository = new Ree dRepository(client);
+            _reedRepository = new ReedRepository(client);
         }
 
         [Test]
         public async Task GetAllJobsAsync_ShouldReturnListOfJobs_WhenExternalAPIReturnsListOfJobs()
         {
-            var mockResponse = new ReedResponse
-            (
-                "JOBS", 1, "1 job found", 1, new List<CareerJetJob> { new CareerJetJob { Title = "test", Company = "test", Description = "test", Locations = "test", Url = "test" } }
-            );
+            var mockResponse = new ReedResponseDto
+            {
+                results = new List<ReedJobDto>
+                {
+                    new ReedJobDto
+                    {
+                        jobTitle = "test",
+                        employerName = "test",
+                        locationName = "test",
+                        jobDescription = "test",
+                        jobUrl = "test"
+                    }
+                }
+            };
 
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -45,7 +55,9 @@ namespace firstDoorBackEnd.Tests
                     Content = JsonContent.Create(mockResponse)
                 });
 
-            var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            var result = await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
 
             Assert.NotNull(result);
             Assert.That(result.Count, Is.EqualTo(1));
@@ -55,10 +67,10 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButNoJobs()
         {
-            var mockResponse = new CareerJetResponse
-            (
-                "JOBS", 1, "1 job found", 1, new List<CareerJetJob>()
-            );
+            var mockResponse = new ReedResponseDto
+            {
+                results = new List<ReedJobDto>()
+            };
 
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -68,7 +80,9 @@ namespace firstDoorBackEnd.Tests
                     Content = JsonContent.Create(mockResponse)
                 });
 
-            var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            var result = await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
 
             Assert.NotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
@@ -77,10 +91,10 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButJobsAreNull()
         {
-            var mockResponse = new CareerJetResponse
-            (
-                 "JOBS", 1, "1 job found", 1, null!
-            );
+            var mockResponse = new ReedResponseDto
+            {
+                results = null!
+            };
 
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -90,7 +104,9 @@ namespace firstDoorBackEnd.Tests
                     Content = JsonContent.Create(mockResponse)
                 });
 
-            var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            var result = await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
 
             Assert.NotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
@@ -99,10 +115,10 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public void GetAllJobsAsync_ShouldThrowCareerJetBadRequestException_WhenExternalAPIReturnsBadRequest()
         {
-            var mockResponse = new CareerJetResponse
-            (
-                "JOBS", 1, "Unsupported locale code", 1, null!
-            );
+            var mockResponse = new ReedResponseDto
+            {
+                results = null!
+            };
 
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -112,22 +128,24 @@ namespace firstDoorBackEnd.Tests
                     Content = JsonContent.Create(mockResponse)
                 });
 
-            var exception = Assert.ThrowsAsync<CareerJetBadRequestException>(async () =>
+            var exception = Assert.ThrowsAsync<Exception>(async () =>
             {
-                await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+                await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
             });
 
-            Assert.That(exception.Message, Does.Contain("Unsupported locale code"));
+            Assert.That(exception.Message, Does.Contain("Invalid Reed API request"));
         }
 
         [TestCase("multiple locations found")]
         [TestCase("no matching location found")]
         public async Task GetAllJobsAsync_ShouldReturnEmptyListOfJobs_WhenExternalAPIReturnsOkButTypeIsLocation(string message)
         {
-            var mockResponse = new CareerJetResponse
-            (
-                "LOCATIONS", 1, message, 1, null!
-            );
+            var mockResponse = new ReedResponseDto
+            {
+                results = null!
+            };
 
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -137,7 +155,9 @@ namespace firstDoorBackEnd.Tests
                     Content = JsonContent.Create(mockResponse)
                 });
 
-            var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            var result = await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
 
             Assert.NotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
@@ -153,12 +173,14 @@ namespace firstDoorBackEnd.Tests
                     StatusCode = System.Net.HttpStatusCode.Forbidden
                 });
 
-            var exception = Assert.ThrowsAsync<CareerJetForbiddenException>(async () =>
+            var exception = Assert.ThrowsAsync<Exception>(async () =>
             {
-                await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+                await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
             });
 
-            Assert.That(exception.Message, Does.Contain("The API key or credentials provided are invalid"));
+            Assert.That(exception.Message, Does.Contain("Invalid Reed API credentials"));
         }
 
         [TestCase(System.Net.HttpStatusCode.BadGateway)]
@@ -173,7 +195,9 @@ namespace firstDoorBackEnd.Tests
                     StatusCode = httpStatusCode
                 });
 
-            var result = await _careerJetRepository.GetAllJobsAsync("129.0.0.1", "Mozilla/5.0");
+            var result = await _reedRepository.GetAllJobsAsync(
+                "developer", 
+                "London");
 
             Assert.NotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
