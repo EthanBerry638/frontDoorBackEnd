@@ -22,7 +22,7 @@ namespace firstDoorBackEnd.Services
             return await _firstDoorRepository.GetJobByIDAsync(id);
         }
 
-        public async Task<Status?> UpdateJobStatus(int id)
+        public async Task<Status?> UpdateJobStatusAsync(int id)
         {
             return null;
         }

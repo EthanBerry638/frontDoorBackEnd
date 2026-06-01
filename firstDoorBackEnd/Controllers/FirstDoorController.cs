@@ -31,7 +31,7 @@ namespace firstDoorBackEnd.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateJobStatus(int id)
+        public async Task<IActionResult> UpdateJobStatusAsync(int id)
         {
             return BadRequest();
         }
