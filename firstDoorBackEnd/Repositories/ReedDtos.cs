@@ -1,12 +1,12 @@
 namespace firstDoorBackEnd.Repositories
 {
-    internal class ReedResponseDto
+    public class ReedResponseDto
     {
         public List<ReedJobDto> results { get; set; } = new();
     }
     
 
-    internal class ReedJobDto
+    public class ReedJobDto
     {
         public string jobTitle { get; set; } = string.Empty;
 
@@ -16,6 +16,6 @@ namespace firstDoorBackEnd.Repositories
 
         public string jobDescription { get; set; } = string.Empty;
 
-        public string jobUrl { get; set; } = string.Empty; 
+        public string jobUrl { get; set; } = string.Empty;
     }
 }

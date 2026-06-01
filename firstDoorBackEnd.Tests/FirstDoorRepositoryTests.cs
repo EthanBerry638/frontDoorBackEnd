@@ -1,6 +1,7 @@
 ﻿using firstDoorBackEnd.Database;
 using firstDoorBackEnd.Models;
 using firstDoorBackEnd.Repositories;
+using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Frameworks;
@@ -38,7 +39,11 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
+<<<<<<< HEAD
         public async Task GetJobByIDAsync_ShouldReturnNull_WhenThereAreNoJobs()
+=======
+        public async Task GetAllSavedJobsAsync_ShouldReturnEmptyListOfJobs_WhenThereAreNoSavedJobsInTheDatabase()
+>>>>>>> main
         {
             if (_context.SavedJobs.Any())
             {
@@ -46,6 +51,7 @@ namespace firstDoorBackEnd.Tests
                 _context.SaveChanges();
             }
 
+<<<<<<< HEAD
             var result = await _repository.GetJobByIDAsync(1);
 
             Assert.That(result, Is.Null);
@@ -98,6 +104,31 @@ namespace firstDoorBackEnd.Tests
             var result = await _repository.GetJobByIDAsync(1);
 
             Assert.That(result, Is.EqualTo(theJob));
+=======
+            var expectedJobs = new List<SavedJob>();
+
+            var result = await _repository.GetAllSavedJobsAsync();
+
+            result.Should().BeEquivalentTo(expectedJobs);
+        }
+
+        [Test]
+        public async Task GetAllSavedJobsAsync_ShouldReturnListOfJobs_WhenThereAreSavedJobsInTheDatabase()
+        {
+            var expectedJobs = new List<SavedJob>
+            {
+                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)}
+            };
+
+            _context.SavedJobs.AddRange(expectedJobs);
+            _context.SaveChanges();
+
+            var result = await _repository.GetAllSavedJobsAsync();
+
+            result.Should().BeEquivalentTo(expectedJobs);
+>>>>>>> main
         }
 
     }
