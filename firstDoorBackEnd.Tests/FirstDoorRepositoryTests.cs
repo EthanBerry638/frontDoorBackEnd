@@ -1,5 +1,7 @@
 ﻿using firstDoorBackEnd.Database;
+using firstDoorBackEnd.Models;
 using firstDoorBackEnd.Repositories;
+using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,10 +33,25 @@ namespace firstDoorBackEnd.Tests
         [TearDown]
         public void TearDown()
         {
-            _context.Dispose();
-            _connection.Dispose();
+            _context?.Dispose();
+            _connection?.Dispose();
         }
 
-        
+        [Test]
+        public async Task GetAllSavedJobsAsync_ShouldReturnListOfJobs_WhenThereAreSavedJobsInTheDatabase()
+        {
+            var expectedJobs = new List<SavedJob>
+            {
+                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"},
+                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test" },
+                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"}
+            };
+
+            _context.SavedJobs.AddRange(expectedJobs);
+
+            var result = await _repository.GetAllSavedJobsAsync();
+
+            result.Should().BeEquivalentTo(expectedJobs);
+        }
     }
 }
