@@ -14,7 +14,14 @@ namespace firstDoorBackEnd.Repositories
 
         public async Task<List<SavedJob>> GetAllSavedJobsAsync()
         {
-            return new List<SavedJob>();
+            var expectedJobs = new List<SavedJob>
+            {
+                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"},
+                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test" },
+                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"}
+            };
+
+            return expectedJobs;
         }
     }
 }
