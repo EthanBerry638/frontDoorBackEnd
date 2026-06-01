@@ -7,7 +7,7 @@ namespace firstDoorBackEnd.Database
     {
         public DbSet<SavedJob> SavedJobs { get; set; }
         public DbSet<JobNote> JobNotes { get; set; }
-        public FirstDoorContext(DbContextOptions options) : base(options) {}
+        public FirstDoorContext(DbContextOptions<FirstDoorContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
