@@ -6,6 +6,6 @@ namespace firstDoorBackEnd.Repositories
     {
         Task<List<SavedJob>> GetAllSavedJobsAsync();
         Task<SavedJob?> GetJobByIDAsync(int id);
-        Task<Status?> UpdateJobStatusAsync(int id);
+        Task<Status?> UpdateJobStatusAsync(SavedJob jobToUpdate);
     }
 }

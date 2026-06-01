@@ -85,7 +85,7 @@ namespace firstDoorBackEnd.Tests
             _context.SaveChanges();
 
             testJob.Status = updatedStatus;
-            await _repository.UpdateJobStatusAsync(id);
+            await _repository.UpdateJobStatusAsync(testJob);
 
             _context.ChangeTracker.Clear();
 

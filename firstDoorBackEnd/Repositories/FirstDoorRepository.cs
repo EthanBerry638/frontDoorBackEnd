@@ -23,7 +23,7 @@ namespace firstDoorBackEnd.Repositories
             return await _context.SavedJobs.FirstOrDefaultAsync(j => j.Id == id);
         }
 
-        public async Task<Status?> UpdateJobStatusAsync(int id)
+        public async Task<Status?> UpdateJobStatusAsync(SavedJob jobToUpdate)
         {
             return Status.Applied;
         }
