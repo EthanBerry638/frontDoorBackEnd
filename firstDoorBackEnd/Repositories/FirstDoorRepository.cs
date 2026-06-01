@@ -25,7 +25,7 @@ namespace firstDoorBackEnd.Repositories
 
         public async Task<Status?> UpdateJobStatusAsync(int id)
         {
-            return null;
+            return Status.Applied;
         }
     }
 }
