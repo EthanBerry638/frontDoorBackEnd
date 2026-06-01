@@ -33,8 +33,8 @@ namespace firstDoorBackEnd.Tests
         [TearDown]
         public void TearDown()
         {
-            _context?.Dispose();
-            _connection?.Dispose();
+            _context.Dispose();
+            _connection.Dispose();
         }
 
         [Test]
