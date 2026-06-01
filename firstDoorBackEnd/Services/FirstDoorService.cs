@@ -3,14 +3,9 @@ using firstDoorBackEnd.Repositories;
 
 namespace firstDoorBackEnd.Services
 {
-    public class FirstDoorService : IFirstDoorService
+    public class FirstDoorService(IFirstDoorRepository firstDoorRepository) : IFirstDoorService
     {
-        private readonly IFirstDoorRepository _firstDoorRepository;
-
-        public FirstDoorService(IFirstDoorRepository firstDoorRepository)
-        {
-            _firstDoorRepository = firstDoorRepository;
-        }
+        private readonly IFirstDoorRepository _firstDoorRepository = firstDoorRepository;
 
         public async Task<SavedJob?> GetJobByIDAsync(int id)
         {

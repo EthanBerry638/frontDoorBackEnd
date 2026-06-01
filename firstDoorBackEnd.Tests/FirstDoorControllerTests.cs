@@ -34,5 +34,16 @@ namespace firstDoorBackEnd.Tests
             Assert.That(job, Is.EqualTo(okResult!.Value));
         }
 
+
+        [Test]
+        public async Task GetJobByIDAsync_ReturnsNotFound_WhenIDDoesNotExist()
+        {
+            var job = new SavedJob();
+            _serviceMock.Setup(s => s.GetJobByIDAsync(It.IsAny<int>())).ReturnsAsync((SavedJob?)null);
+
+            var result = await _controller.GetJobByIDAsync(1);
+
+            Assert.IsInstanceOf<NotFoundObjectResult>(result);
+        }
     }
 }
