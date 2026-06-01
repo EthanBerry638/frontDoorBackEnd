@@ -38,6 +38,8 @@ namespace firstDoorBackEnd.Tests
                 builder.ConfigureTestServices(services =>
                 {
                     _mockRepository.Setup(repo => repo.GetAllSavedJobsAsync()).ReturnsAsync(expectedJobs);
+
+                    services.AddScoped(_ => _mockRepository.Object);
                 });
             }).CreateClient();
 
