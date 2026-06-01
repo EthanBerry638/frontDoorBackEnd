@@ -25,7 +25,8 @@ namespace firstDoorBackEnd.Repositories
 
         public async Task<Status?> UpdateJobStatusAsync(SavedJob jobToUpdate)
         {
-            return Status.Applied;
+            await _context.SaveChangesAsync();
+            return jobToUpdate.Status;
         }
     }
 }
