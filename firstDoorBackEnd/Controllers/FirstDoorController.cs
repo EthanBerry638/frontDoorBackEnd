@@ -13,5 +13,11 @@ namespace firstDoorBackEnd.Controllers
         {
             _firstDoorService = firstDoorService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllSavedJobsAsync()
+        {
+            return BadRequest();
+        }
     }
 }
