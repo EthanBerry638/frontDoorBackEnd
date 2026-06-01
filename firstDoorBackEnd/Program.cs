@@ -2,7 +2,14 @@ using firstDoorBackEnd.Repositories;
 using firstDoorBackEnd.Middleware;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using firstDoorBackEnd.Services;
+using firstDoorBackEnd.Database;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<FirstDoorContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddHttpClient();
 
