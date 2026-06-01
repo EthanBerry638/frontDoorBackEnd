@@ -76,7 +76,7 @@ namespace firstDoorBackEnd.Tests
         public async Task UpdateJobStatusAsync_ShouldReturnStatusIncreasedByOne_WhenAJobExistsAtTheIdPassedIn()
         {
             Status originalStatus = Status.To_Apply; 
-            Status expectedStatus = Status.Applied; 
+            Status updatedStatus = Status.Applied; 
             int id = 1;
 
             var testJob = new SavedJob { Id = id, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3), Status = originalStatus };
@@ -84,9 +84,13 @@ namespace firstDoorBackEnd.Tests
             _context.SavedJobs.Add(testJob);
             _context.SaveChanges();
 
-            var result = await _repository.UpdateJobStatusAsync(id);
+            testJob.Status = updatedStatus;
+            await _repository.UpdateJobStatusAsync(id);
 
-            result.ShouldBeEquivalentTo(expectedStatus);
+            _context.ChangeTracker.Clear();
+
+            var updatedJob = await _context.SavedJobs.FindAsync(id);
+            updatedJob!.Status.Should().Be(updatedStatus);
         }
     }
 }
