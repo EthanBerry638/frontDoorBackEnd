@@ -10,7 +10,7 @@ namespace firstDoorBackEnd.Controllers
     {
         private readonly IFirstDoorService _firstDoorService;
 
-        public FirstDoorController (IFirstDoorService firstDoorService)
+        public FirstDoorController(IFirstDoorService firstDoorService)
         {
             _firstDoorService = firstDoorService;
         }
@@ -21,6 +21,13 @@ namespace firstDoorBackEnd.Controllers
             var jobs = await _firstDoorService.GetAllSavedJobsAsync();
 
             return Ok(jobs);
+        }
+            
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetJobByIDAsync(int id)
+        {
+            var job = await _firstDoorService.GetJobByIDAsync(id);
+            return Ok(job); 
         }
     }
 }
