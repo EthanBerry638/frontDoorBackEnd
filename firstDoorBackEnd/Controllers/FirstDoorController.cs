@@ -29,5 +29,11 @@ namespace firstDoorBackEnd.Controllers
             var job = await _firstDoorService.GetJobByIDAsync(id);
             return Ok(job); 
         }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateJobStatus(int id)
+        {
+            return BadRequest();
+        }
     }
 }

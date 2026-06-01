@@ -6,5 +6,6 @@ namespace firstDoorBackEnd.Services
     {
         Task<List<SavedJob>> GetAllSavedJobsAsync();
         Task<SavedJob?> GetJobByIDAsync(int id);
+        Task<Status?> UpdateJobStatus(int id);
     }
 }
