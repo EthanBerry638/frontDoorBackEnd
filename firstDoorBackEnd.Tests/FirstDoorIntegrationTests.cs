@@ -31,8 +31,15 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public async Task GetAllSavedJobsAsyncEndpoint_ShouldReturnOkAndEmptyList_WhenDbIsNotSeeded()
         {
-            var client = _factory.CreateClient();
             var expectedJobs = new List<SavedJob>();
+
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    _mockRepository.Setup(repo => repo.GetAllSavedJobsAsync()).ReturnsAsync(expectedJobs);
+                });
+            }).CreateClient();
 
             var response = await client.GetAsync("api/FirstDoor");
 
@@ -45,7 +52,7 @@ namespace firstDoorBackEnd.Tests
                 PropertyNameCaseInsensitive = true
             });
 
-            jobs.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
+            jobs.Should().BeEquivalentTo(expectedJobs);
         }
 
         [Test]
