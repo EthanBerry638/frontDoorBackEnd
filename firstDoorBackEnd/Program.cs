@@ -36,9 +36,14 @@ builder.Services.AddHttpClient<ICareerJetRepository, CareerJetRepository>(client
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddHttpClient<IReedService, ReedService>();
 builder.Services.AddScoped<IReedService, ReedService>();
 builder.Services.AddScoped<IReedRepository, ReedRepository>();
+
+builder.Services.AddScoped<IFirstDoorService, FirstDoorService>();
+builder.Services.AddScoped<IFirstDoorRepository, FirstDoorRepository>();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(options =>
 {
