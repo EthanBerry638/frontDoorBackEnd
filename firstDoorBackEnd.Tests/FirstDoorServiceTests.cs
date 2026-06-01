@@ -51,7 +51,8 @@ namespace firstDoorBackEnd.Tests
             result.Should().BeEquivalentTo(expectedJobs);
 
             _mockRepository.Verify(repo => repo.GetAllSavedJobsAsync(), Times.Once());
-          
+        }
+
         [Test]
         public async Task GetJobByIDAsync_ReturnsCorrectJob()
         {
