@@ -23,7 +23,7 @@ namespace firstDoorBackEnd.Controllers
             [FromQuery]string keyword,
             [FromQuery]string location)
         {
-            var filteredSearch = $"{keyword} junior OR \"entry level\" OR \"graduate\" OR \"trainee\"";
+            var filteredSearch = $"title: ({keyword}) AND {keyword} OR \"entry level\" OR \"entry-level\" OR \"trainee\"";
             var jobs = await _reedService.GetJobsAsync(filteredSearch, location);
             return Ok(jobs);
         }
