@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using firstDoorBackEnd.Services;
+using firstDoorBackEnd.Models;
 
 namespace firstDoorBackEnd.Controllers
 {
@@ -17,7 +18,8 @@ namespace firstDoorBackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSavedJobsAsync()
         {
-            return BadRequest();
+            await _firstDoorService.GetAllSavedJobsAsync();
+            return Ok(new List<SavedJob>());
         }
     }
 }
