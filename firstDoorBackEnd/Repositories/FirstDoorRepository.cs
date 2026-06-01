@@ -1,4 +1,6 @@
-﻿using firstDoorBackEnd.Database;
+﻿using Azure;
+using firstDoorBackEnd.Database;
+using firstDoorBackEnd.Exceptions;
 using firstDoorBackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 

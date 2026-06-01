@@ -76,7 +76,7 @@ namespace firstDoorBackEnd.Tests
 
 
         [Test]
-        public async Task GetJobByIDAsync_ReturnsNotFound_WhenIDDoesNotExist()
+        public async Task GetJobByIDAsync_Returns404_WhenIDDoesNotExist()
         {
             var job = new SavedJob();
             _serviceMock.Setup(s => s.GetJobByIDAsync(It.IsAny<int>())).ReturnsAsync((SavedJob?)null);

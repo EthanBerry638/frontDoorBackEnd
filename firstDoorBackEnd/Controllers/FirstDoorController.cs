@@ -25,7 +25,7 @@ namespace firstDoorBackEnd.Controllers
 
             if (job == null)
             {
-                return NotFound(job);
+                return NotFound($"Job with ID {id} not found.");
             }
             return Ok(job); 
         }

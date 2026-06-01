@@ -1,5 +1,6 @@
-﻿using firstDoorBackEnd.Repositories;
+﻿using firstDoorBackEnd.Exceptions;
 using firstDoorBackEnd.Models;
+using firstDoorBackEnd.Repositories;
 
 namespace firstDoorBackEnd.Services
 {
