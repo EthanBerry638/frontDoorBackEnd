@@ -19,10 +19,12 @@ namespace firstDoorBackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllJobsAsync(string keyword, string location)
+        public async Task<IActionResult> GetAllJobsAsync(
+            [FromQuery]string keyword,
+            [FromQuery]string location)
         {
-
-            var jobs = await _reedService.GetJobsAsync("junior developer", "london");
+            var filteredSearch = $"{keyword} junior OR \"entry level\" OR \"graduate\" OR \"trainee\"";
+            var jobs = await _reedService.GetJobsAsync(filteredSearch, location);
             return Ok(jobs);
         }
     }

@@ -2,7 +2,14 @@ using firstDoorBackEnd.Repositories;
 using firstDoorBackEnd.Middleware;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using firstDoorBackEnd.Services;
+using firstDoorBackEnd.Database;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<FirstDoorContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddHttpClient();
 
@@ -29,9 +36,14 @@ builder.Services.AddHttpClient<ICareerJetRepository, CareerJetRepository>(client
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddHttpClient<IReedService, ReedService>();
 builder.Services.AddScoped<IReedService, ReedService>();
 builder.Services.AddScoped<IReedRepository, ReedRepository>();
+
+builder.Services.AddScoped<IFirstDoorService, FirstDoorService>();
+builder.Services.AddScoped<IFirstDoorRepository, FirstDoorRepository>();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(options =>
 {

@@ -16,8 +16,12 @@ namespace firstDoorBackEnd.Services
 
         public async Task<List<Job>> GetJobsAsync(string keyword, string location)
         {
-            return await _reedRepository.GetAllJobsAsync(keyword, location);
-        }
-    }
+            return await _reedRepository.GetAllJobsAsync(keyword, location) ?? new List<Job>();
 
+           
+
+        }
+
+      
+    }
 }
