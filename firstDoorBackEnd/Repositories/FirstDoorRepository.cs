@@ -1,4 +1,6 @@
-﻿using firstDoorBackEnd.Database;
+﻿using firstDoorBackEnd.Models;
+using firstDoorBackEnd.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace firstDoorBackEnd.Repositories
 {
@@ -9,6 +11,11 @@ namespace firstDoorBackEnd.Repositories
         public FirstDoorRepository(FirstDoorContext context)
         {
             _context = context; 
+        }
+
+        public async Task<SavedJob?> GetJobByIDAsync(int id)
+        {
+            return await _context.SavedJobs.FirstOrDefaultAsync(j => j.Id == id);
         }
     }
 }
