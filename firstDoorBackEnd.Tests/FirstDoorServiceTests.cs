@@ -28,7 +28,7 @@ namespace firstDoorBackEnd.Tests
 
             var result = await _service.GetAllSavedJobsAsync();
 
-            result.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
+            result.Should().BeEquivalentTo(expectedJobs);
 
             _mockRepository.Verify(repo => repo.GetAllSavedJobsAsync(), Times.Once());
         }
@@ -38,21 +38,16 @@ namespace firstDoorBackEnd.Tests
         {
             var expectedJobs = new List<SavedJob>
             {
-                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"},
-                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test" },
-                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"}
+                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)}
             };
 
             _mockRepository.Setup(repo => repo.GetAllSavedJobsAsync()).ReturnsAsync(expectedJobs);
 
             var result = await _service.GetAllSavedJobsAsync();
 
-            result.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
-
-            foreach (var job in result)
-            {
-                job.TimeSaved.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
-            }
+            result.Should().BeEquivalentTo(expectedJobs);
 
             _mockRepository.Verify(repo => repo.GetAllSavedJobsAsync(), Times.Once());
         }
