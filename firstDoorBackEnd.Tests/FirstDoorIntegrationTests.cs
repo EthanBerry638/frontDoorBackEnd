@@ -60,9 +60,9 @@ namespace firstDoorBackEnd.Tests
         {
             var expectedJobs = new List<SavedJob>
             {
-                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"},
-                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test" },
-                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test"}
+                new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 2, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)},
+                new SavedJob { Id = 3, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3)}
             };
 
             var client = _factory.WithWebHostBuilder(builder =>
@@ -86,12 +86,7 @@ namespace firstDoorBackEnd.Tests
                 PropertyNameCaseInsensitive = true
             });
 
-            jobs.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
-
-            foreach (var job in jobs)
-            {
-                job.TimeSaved.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
-            }
+            jobs.Should().BeEquivalentTo(expectedJobs);
         }
     }
 }
