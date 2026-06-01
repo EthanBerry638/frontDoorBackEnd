@@ -5,7 +5,7 @@ using firstDoorBackEnd.Models;
 namespace firstDoorBackEnd.Controllers
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     public class FirstDoorController : ControllerBase
     {
         private readonly IFirstDoorService _firstDoorService;
@@ -15,6 +15,14 @@ namespace firstDoorBackEnd.Controllers
             _firstDoorService = firstDoorService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllSavedJobsAsync()
+        {
+            var jobs = await _firstDoorService.GetAllSavedJobsAsync();
+
+            return Ok(jobs);
+        }
+            
         [HttpGet("{id}")]
         public async Task<IActionResult> GetJobByIDAsync(int id)
         {

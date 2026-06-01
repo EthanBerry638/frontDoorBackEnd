@@ -1,5 +1,5 @@
-﻿using firstDoorBackEnd.Models;
-using firstDoorBackEnd.Repositories;
+﻿using firstDoorBackEnd.Repositories;
+using firstDoorBackEnd.Models;
 
 namespace firstDoorBackEnd.Services
 {
@@ -12,6 +12,11 @@ namespace firstDoorBackEnd.Services
             _firstDoorRepository = firstDoorRepository;
         }
 
+        public async Task<List<SavedJob>> GetAllSavedJobsAsync()
+        {
+            return await _firstDoorRepository.GetAllSavedJobsAsync();
+        }
+        
         public async Task<SavedJob?> GetJobByIDAsync(int id)
         {
             return await _firstDoorRepository.GetJobByIDAsync(id);
