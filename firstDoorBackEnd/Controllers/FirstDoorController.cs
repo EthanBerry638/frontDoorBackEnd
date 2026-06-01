@@ -5,7 +5,7 @@ using firstDoorBackEnd.Models;
 namespace firstDoorBackEnd.Controllers
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     public class FirstDoorController : ControllerBase
     {
         private readonly IFirstDoorService _firstDoorService;
