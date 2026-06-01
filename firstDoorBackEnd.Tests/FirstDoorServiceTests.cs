@@ -20,6 +20,25 @@ namespace firstDoorBackEnd.Tests
         }
 
         [Test]
+        public async Task GetAllSavedJobsAsync_ShouldReturnEmptyList_WhenRepositoryIsCalledAndReturnsEmptyList()
+        {
+            var expectedJobs = new List<SavedJob>();
+
+            _mockRepository.Setup(repo => repo.GetAllSavedJobsAsync()).ReturnsAsync(expectedJobs);
+
+            var result = await _service.GetAllSavedJobsAsync();
+
+            result.Should().BeEquivalentTo(expectedJobs, options => options.Excluding(j => j.TimeSaved));
+
+            foreach (var job in result)
+            {
+                job.TimeSaved.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+            }
+
+            _mockRepository.Verify(repo => repo.GetAllSavedJobsAsync(), Times.Once());
+        }
+
+        [Test]
         public async Task GetAllSavedJobsAsync_ShouldReturnListOfSavedJobs_WhenRepositoryIsCalledAndReturnsListOfSavedJobs()
         {
             var expectedJobs = new List<SavedJob>
