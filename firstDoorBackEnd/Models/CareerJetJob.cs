@@ -2,7 +2,7 @@
 
 namespace firstDoorBackEnd.Models
 {
-    public class CareerJetJob
+    public class CareerJetJob 
     {
         [JsonPropertyName("title")]
         public string Title { get; set; } = string.Empty;

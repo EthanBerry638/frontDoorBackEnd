@@ -1,5 +1,5 @@
-﻿using firstDoorBackEnd.Models;
-using firstDoorBackEnd.Exceptions;
+﻿using firstDoorBackEnd.Exceptions;
+using firstDoorBackEnd.Models;
 
 namespace firstDoorBackEnd.Repositories
 {
@@ -12,7 +12,7 @@ namespace firstDoorBackEnd.Repositories
             _httpClient = httpClient;
         }
 
-        public async Task<List<Job>> GetAllJobsAsync(string userIp, string userAgent)
+        public async Task<List<CareerJetJob>> GetAllJobsAsync(string userIp, string userAgent)
         {
             string query = $"v4/query?keywords={Uri.EscapeDataString("junior software")}" +
                            $"&location={Uri.EscapeDataString("london")}" +
@@ -24,8 +24,10 @@ namespace firstDoorBackEnd.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var jobResponse = await response.Content.ReadFromJsonAsync<CareerJetResponse>();
-                return jobResponse?.jobs ?? new List<Job>();
+
+                return jobResponse!.jobs ?? new List<CareerJetJob>();
             }
+
 
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -39,7 +41,7 @@ namespace firstDoorBackEnd.Repositories
                 throw new CareerJetForbiddenException("The API key or credentials provided are invalid");
             }
 
-            return new List<Job>();
+            return new List<CareerJetJob>();
         }
     }
 }

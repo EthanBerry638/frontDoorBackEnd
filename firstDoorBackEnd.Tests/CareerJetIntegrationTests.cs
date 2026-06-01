@@ -31,11 +31,18 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public async Task GetAllJobsEndpoint_ShouldReturnListOfJobs_WhenRepositoryReturnsListOfJobs()
         {
-            var expectedList = new List<Job>
+            var expectedList = new List<CareerJetJob>
             {
-                new("test", "test", "test", "test", "test"),
-                new("test", "test", "test", "test", "test"),
-                new("test", "test", "test", "test", "test")
+                new CareerJetJob{ Title = "test", Company = "test", Locations = "test", Description = "test", Url = "test" },
+                new CareerJetJob{ Title = "test", Company = "test", Locations = "test", Description = "test", Url = "test" },
+                new CareerJetJob { Title = "test", Company = "test", Locations = "test", Description = "test", Url = "test" }
+            };
+
+            var expectedFinalList = new List<Job>
+            {
+                new Job( "test", "test", "test", "test", "test" ),
+                new Job( "test", "test", "test", "test", "test" ),
+                new Job ( "test", "test", "test", "test", "test" )
             };
 
             var client = _factory.WithWebHostBuilder(builder =>
@@ -61,13 +68,13 @@ namespace firstDoorBackEnd.Tests
                 PropertyNameCaseInsensitive = true
             });
 
-            Assert.That(jobs, Is.EqualTo(expectedList));
+            Assert.That(jobs, Is.EqualTo(expectedFinalList));
         }
 
         [Test]
-        public async Task GetAllJobsEndpoint_ShouldReturnEmptyListOfJobs_WhenRepositoryReturnsListOfJobs()
+        public async Task GetAllJobsEndpoint_ShouldReturnEmptyListOfJobs_WhenRepositoryReturnsEmpty()
         {
-            var expectedList = new List<Job>();
+            var expectedList = new List<CareerJetJob>();
 
             var client = _factory.WithWebHostBuilder(builder =>
             {
@@ -87,7 +94,7 @@ namespace firstDoorBackEnd.Tests
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var jobs = JsonSerializer.Deserialize<List<Job>>(content, new JsonSerializerOptions
+            var jobs = JsonSerializer.Deserialize<List<CareerJetJob>>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
