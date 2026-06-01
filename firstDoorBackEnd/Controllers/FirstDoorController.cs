@@ -18,8 +18,9 @@ namespace firstDoorBackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSavedJobsAsync()
         {
-            await _firstDoorService.GetAllSavedJobsAsync();
-            return Ok(new List<SavedJob>());
+            var jobs = await _firstDoorService.GetAllSavedJobsAsync();
+
+            return Ok(jobs);
         }
     }
 }
