@@ -36,7 +36,7 @@ namespace firstDoorBackEnd.Services
                 _ => Status.To_Apply
             };
 
-            return updatedStatus;
+            return await _firstDoorRepository.UpdateJobStatusAsync(job);
         }
     }
 }
