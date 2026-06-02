@@ -26,7 +26,9 @@ namespace firstDoorBackEnd.Services
         {
             var job = await _firstDoorRepository.GetJobByIDAsync(id);
 
-            return null;
+            if (job is null) return null;
+
+            return Status.To_Apply;
         }
     }
 }
