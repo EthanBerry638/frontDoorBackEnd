@@ -28,7 +28,7 @@ namespace firstDoorBackEnd.Services
 
             if (job is null) return null;
 
-            var updatedStatus = job.Status switch
+            job.Status = job.Status switch
             {
                 Status.To_Apply => Status.Applied,
                 Status.Applied => Status.Interviewing,
@@ -36,7 +36,9 @@ namespace firstDoorBackEnd.Services
                 _ => Status.To_Apply
             };
 
-            return await _firstDoorRepository.UpdateJobStatusAsync(job);
+            await _firstDoorRepository.UpdateJobStatusAsync(job);
+
+            return job.Status;
         }
     }
 }
