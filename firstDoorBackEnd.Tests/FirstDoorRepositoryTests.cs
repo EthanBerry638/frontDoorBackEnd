@@ -92,5 +92,23 @@ namespace firstDoorBackEnd.Tests
             var updatedJob = await _context.SavedJobs.FindAsync(id);
             updatedJob!.Status.Should().Be(updatedStatus);
         }
+
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldNotChangeDatabase_WhenStatusIsNotChanged()
+        {
+            Status originalStatus = Status.To_Apply;
+            int id = 1;
+
+            var testJob = new SavedJob { Id = id, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3), Status = originalStatus };
+
+            _context.SavedJobs.Add(testJob);
+            _context.SaveChanges();
+
+            await _repository.UpdateJobStatusAsync(testJob);
+            _context.ChangeTracker.Clear();
+
+            var jobFromDb = await _context.SavedJobs.FindAsync(id);
+            jobFromDb!.Status.Should().Be(originalStatus);
+        }
     }
 }
