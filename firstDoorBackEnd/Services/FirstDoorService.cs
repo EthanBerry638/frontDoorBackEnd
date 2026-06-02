@@ -28,7 +28,7 @@ namespace firstDoorBackEnd.Services
 
             if (job is null) return null;
 
-            return Status.To_Apply;
+            return Status.Applied;
         }
     }
 }
