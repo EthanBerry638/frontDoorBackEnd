@@ -109,5 +109,24 @@ namespace firstDoorBackEnd.Tests
 
             _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
         }
+
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldReturnUpdatedStatusFromRepo_WhenGetByIdAsyncIsCalledAndReturnsJobAndUpdateIsCalledAndReturnsUpdatedStatus()
+        {
+            int id = 1;
+            Status originalStatus = Status.Applied;
+            Status changedStatus = Status.Interviewing;
+            var job = new SavedJob { Id = id, Status = originalStatus };
+
+            _mockRepository.Setup(repo => repo.GetJobByIDAsync(id)).ReturnsAsync(job);
+            _mockRepository.Setup(repo => repo.UpdateJobStatusAsync(job)).ReturnsAsync(changedStatus);
+
+            var result = await _service.UpdateJobStatusAsync(id);
+
+            result.Should().Be(changedStatus);
+
+            _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
+            _mockRepository.Verify(repo => repo.UpdateJobStatusAsync(job), Times.Once());
+        }
     }
 }
