@@ -33,7 +33,7 @@ namespace firstDoorBackEnd.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateJobStatusAsync(int id)
         {
-            return BadRequest();
+            return NotFound();
         }
     }
 }
