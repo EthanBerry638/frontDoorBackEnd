@@ -28,7 +28,15 @@ namespace firstDoorBackEnd.Services
 
             if (job is null) return null;
 
-            return Status.Applied;
+            var updatedStatus = job.Status switch
+            {
+                Status.To_Apply => Status.Applied,
+                Status.Applied => Status.Interviewing,
+                Status.Interviewing => Status.Rejected,
+                _ => Status.To_Apply
+            };
+
+            return updatedStatus;
         }
     }
 }
