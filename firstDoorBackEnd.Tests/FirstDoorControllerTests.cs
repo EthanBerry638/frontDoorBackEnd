@@ -74,5 +74,14 @@ namespace firstDoorBackEnd.Tests
             Assert.That(job, Is.EqualTo(okResult!.Value));
         }
 
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldReturnNotFound_WhenServiceReturnsNull()
+        {
+            _serviceMock.Setup(serv => serv.UpdateJobStatusAsync(It.IsAny<int>())).ReturnsAsync((Status?)null);
+
+            var result = await _controller.UpdateJobStatusAsync(1);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
     }
 }
