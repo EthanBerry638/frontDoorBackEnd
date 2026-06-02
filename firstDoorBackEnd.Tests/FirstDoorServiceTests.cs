@@ -63,5 +63,17 @@ namespace firstDoorBackEnd.Tests
 
             Assert.That(job, Is.EqualTo(result));
         }
+
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldReturnNull_WhenGetByIdAsyncIsCalledAndReturnsNull()
+        {
+            int id = 300;
+
+            _mockRepository.Setup(repo => repo.GetJobByIDAsync(id)).ReturnsAsync((SavedJob)null!);
+
+            var result = await _service.UpdateJobStatusAsync(id);
+
+            _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
+        }
     }
 }
