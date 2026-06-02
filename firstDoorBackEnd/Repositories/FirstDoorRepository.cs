@@ -1,17 +1,14 @@
-﻿using firstDoorBackEnd.Database;
+﻿using Azure;
+using firstDoorBackEnd.Database;
+using firstDoorBackEnd.Exceptions;
 using firstDoorBackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace firstDoorBackEnd.Repositories
 {
-    public class FirstDoorRepository : IFirstDoorRepository
+    public class FirstDoorRepository(FirstDoorContext context) : IFirstDoorRepository
     {
-        private readonly FirstDoorContext _context;
-
-        public FirstDoorRepository(FirstDoorContext context)
-        {
-            _context = context; 
-        }
+        private readonly FirstDoorContext _context = context;
 
         public async Task<List<SavedJob>> GetAllSavedJobsAsync()
         {
@@ -20,7 +17,7 @@ namespace firstDoorBackEnd.Repositories
         
         public async Task<SavedJob?> GetJobByIDAsync(int id)
         {
-            return await _context.SavedJobs.FirstOrDefaultAsync(j => j.Id == id);
+            return await _context.SavedJobs.FirstOrDefaultAsync(j => j.Id == id) ?? null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using firstDoorBackEnd.Exceptions;
 using firstDoorBackEnd.Models;
 using firstDoorBackEnd.Repositories;
 using firstDoorBackEnd.Services;
@@ -56,12 +57,23 @@ namespace firstDoorBackEnd.Tests
         [Test]
         public async Task GetJobByIDAsync_ReturnsCorrectJob()
         {
-            var job = new SavedJob();
-            _mockRepository.Setup(s => s.GetJobByIDAsync(It.IsAny<int>())).ReturnsAsync(job);
+            var job = new SavedJob { Id = 1, Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3) };
+
+            _mockRepository.Setup(r => r.GetJobByIDAsync(1)).ReturnsAsync(job);
 
             var result = await _service.GetJobByIDAsync(1);
 
             Assert.That(job, Is.EqualTo(result));
+        }
+
+        [Test]
+        public async Task GetJobByIDAsync_ReturnsNull_WhenIDDoesNotExist()
+        {
+            _mockRepository.Setup(r => r.GetJobByIDAsync(It.IsAny<int>())).ReturnsAsync((SavedJob?)null);
+
+            var result = await _service.GetJobByIDAsync(1);
+
+            Assert.IsNull(result);
         }
     }
 }
