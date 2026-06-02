@@ -73,6 +73,8 @@ namespace firstDoorBackEnd.Tests
 
             var result = await _service.UpdateJobStatusAsync(id);
 
+            result.Should().BeNull();
+
             _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
         }
 
