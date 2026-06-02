@@ -29,12 +29,6 @@ namespace firstDoorBackEnd.Tests
         [TearDown]
         public async Task TearDown()
         {
-            using var scope = _factory.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<FirstDoorContext>();
-
-            context.SavedJobs.RemoveRange(context.SavedJobs);
-            await context.SaveChangesAsync();
-
             _factory.Dispose();
         }
 
@@ -109,10 +103,17 @@ namespace firstDoorBackEnd.Tests
 
             SavedJob job = new()
             {Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3) };
-            context.SavedJobs.Add(job);
-            await context.SaveChangesAsync();
 
-            var client = _factory.CreateClient();
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    _mockRepository.Setup(repo => repo.GetJobByIDAsync(job.Id)).ReturnsAsync(job);
+
+                    services.AddScoped(_ => _mockRepository.Object);
+                });
+            }).CreateClient();
+
             var response = await client.GetAsync($"api/FirstDoor/{job.Id}");
             var result = await response.Content.ReadFromJsonAsync<SavedJob>();
 
