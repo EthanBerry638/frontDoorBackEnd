@@ -92,5 +92,22 @@ namespace firstDoorBackEnd.Tests
 
             _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
         }
+
+        [Test]
+        public async Task UpdateJobStatusAsync_ShouldWrapAroundBackToZero_WhenGetByIdAsyncIsCalledAndReturnsJobButStatusIsAtTheMaxValue()
+        {
+            int id = 1;
+            Status originalStatus = Status.Rejected;
+            Status changedStatus = Status.To_Apply;
+            var job = new SavedJob { Id = id, Status = originalStatus };
+
+            _mockRepository.Setup(repo => repo.GetJobByIDAsync(id)).ReturnsAsync(job);
+
+            var result = await _service.UpdateJobStatusAsync(id);
+
+            result.Should().Be(changedStatus);
+
+            _mockRepository.Verify(repo => repo.GetJobByIDAsync(id), Times.Once());
+        }
     }
 }
