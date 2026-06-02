@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -22,11 +23,18 @@ namespace firstDoorBackEnd.Tests
         {
             _factory = new WebApplicationFactory<Program>();
             _mockRepository = new Mock<IFirstDoorRepository>();
+
         }
 
         [TearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
+            using var scope = _factory.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<FirstDoorContext>();
+
+            context.SavedJobs.RemoveRange(context.SavedJobs);
+            await context.SaveChangesAsync();
+
             _factory.Dispose();
         }
 
@@ -107,6 +115,22 @@ namespace firstDoorBackEnd.Tests
             var result = await response.Content.ReadFromJsonAsync<SavedJob>();
 
             Assert.That(result!.Id, Is.EqualTo(job.Id));
+        }
+
+
+        [Test]
+        public async Task GetJobByIDAsyncEndpoint_ShouldReturnNotFound_WhenJobDoesNotExist()
+        {
+            using var scope = _factory.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<FirstDoorContext>();
+
+            SavedJob job = new()
+            { Title = "test", Description = "test", EmployerName = "test", Location = "test", Url = "test", TimeSaved = new DateTime(2025, 4, 3) };
+
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync($"api/FirstDoor/{job.Id}");
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
     }
 }
